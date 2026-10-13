@@ -74,3 +74,17 @@ training scale**. Whoever makes agent-grade intelligence cheapest to run wins
 deployment, and deployment is where intelligence compounds (more usage → more
 data → better models). Efficiency isn't a constraint on AGI — it's the
 strategy.
+
+## 12. Failure modes and adversarial pressures
+
+The efficiency thesis has two sharp failure modes. First, **under-reasoning
+on high-stakes tasks**: compact chain-of-thought optimizes for token cost,
+which can silently trade away the deliberation a safety-critical decision
+needs. The runtime must scale test-time compute *up* (not down) when the
+governance tier flags a step as high-stakes — cost discipline without a
+risk override becomes a vulnerability. Second, **efficiency monoculture**: if
+every deployment optimizes for cheapest-adequate, the ecosystem converges on
+a handful of efficient models, and one jailbreak in the dominant cheap model
+becomes everyone's jailbreak (correlated failure). The counterweight is
+cost-aware diversity: route by risk class, not just by price, and keep a
+frontier model in the loop for the decisions where being wrong is expensive.
