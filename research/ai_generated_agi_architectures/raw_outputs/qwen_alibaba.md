@@ -74,3 +74,17 @@ The non-obvious move is **architectural humility**: don't innovate in the
 agent loop — innovate in the *model's tool-calling reliability*, then let a
 boring, standard loop (ReAct + router) outperform fancier frameworks. Most
 agent failures are tool-call failures; fix the model, not the framework.
+
+## 12. Failure modes and adversarial pressures
+
+The kernel-and-syscalls thesis concentrates risk in two places. First,
+**tool-schema trust**: if "the world model is the tool schema documentation
+plus observed outputs," then a poisoned, stale, or drifted tool schema is a
+poisoned world model. Schema provenance, versioning, and change-review become
+safety-critical controls, not engineering hygiene. Second, **open-flywheel
+monoculture**: when every team assembles from the same public artifacts (same
+weights, same framework patterns, same benchmark suites), failures correlate
+across deployments — the openness that accelerates progress also synchronizes
+vulnerabilities. The mitigation is compositional diversity: keep components
+interchangeable (the framework's strength) and deliberately vary the
+composition per deployment, so no single failure mode is universal.
