@@ -35,12 +35,21 @@ comparative analysis is original research work.
 - `raw_outputs/` — one file per family (attribution header in each).
 - `comparison.csv` — 10 systems × 13 columns (11 architecture dimensions +
   identifiers), consistently coded.
+- `comparison_scores.csv` — researcher-coded 1–5 scores per dimension per
+  system (analytic coding of the qualitative cells; see `scoring.md`).
+- `scoring.md` — scoring rubric, computed summaries, and reproducibility
+  notes for the scores.
 - `summary.md` — common patterns (6 with 8+/10 agreement), 5 genuine
   disagreements, 8 notable ideas worth stealing, and gaps in all ten.
 - `synthesis.md` — a combined architecture concrete enough to implement,
-  mapped onto Cognitive-OS's actual subsystems, with a 7-step roadmap.
+  mapped onto Cognitive-OS's actual subsystems, with a 7-step roadmap,
+  architecture diagrams (Mermaid + ASCII), and a governed-loop pseudocode
+  sketch.
 - `sources.md` — provenance disclosure, grounding materials per family,
-  human-edit log.
+  canonical public links, human-edit log.
+- `tools/validate_packet.py` — mechanical consistency checker (required
+  files, CSV structure, cross-references, secret scan) plus
+  `tools/validation_report.txt`.
 
 ## Headline findings
 
