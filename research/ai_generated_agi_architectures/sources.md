@@ -48,6 +48,34 @@ Links are to the publishers' official documentation and publication pages as
 of October 2026; specific URLs are omitted to avoid link rot, but every claim
 above is traceable to the named organization's public materials.
 
+## Key public references (canonical links)
+
+Stable, canonical links to the public materials named above (checked
+2026-10-13). These are the publishers' official documentation, paper, or
+repository pages — no paywalled, private, or scraped content.
+
+| Family | Reference | Link |
+|---|---|---|
+| OpenAI GPT | GPT-4 technical report | https://arxiv.org/abs/2303.08774 |
+| OpenAI GPT | OpenAI Agents SDK | https://openai.github.io/openai-agents-python/ |
+| Anthropic Claude | Constitutional AI paper | https://arxiv.org/abs/2212.08073 |
+| Anthropic Claude | Model Context Protocol | https://modelcontextprotocol.io/ |
+| Anthropic Claude | "Building effective agents" (engineering blog) | https://www.anthropic.com/engineering/building-effective-agents |
+| Google Gemini | Gemini API documentation | https://ai.google.dev/gemini-api/docs |
+| Google Gemini | Titans: neural long-term memory | https://arxiv.org/abs/2501.00663 |
+| Google Gemini | AlphaEvolve | https://arxiv.org/abs/2506.13131 |
+| xAI Grok | xAI | https://x.ai/ |
+| DeepSeek | DeepSeek-V3 technical report | https://arxiv.org/abs/2412.19437 |
+| DeepSeek | DeepSeek-R1 technical report | https://arxiv.org/abs/2501.12948 |
+| Qwen / Alibaba | Qwen2.5 technical report | https://arxiv.org/abs/2412.15115 |
+| Qwen / Alibaba | Qwen-Agent framework | https://github.com/QwenLM/Qwen-Agent |
+| Meta Llama | Llama 3 herd of models | https://arxiv.org/abs/2407.21783 |
+| Meta Llama | Llama Stack | https://llama-stack.readthedocs.io/ |
+| Meta Llama | PurpleLlama safety tooling | https://github.com/meta-llama/PurpleLlama |
+| Mistral AI | Mistral AI releases | https://mistral.ai/news/ |
+| Perplexity | Perplexity blog | https://www.perplexity.ai/hub/blog |
+| Moonshot Kimi | Kimi k1.5 technical report | https://arxiv.org/abs/2501.12599 |
+
 ## Human edits
 
 - All ten reconstructions: drafted with AI assistance, then reviewed and
