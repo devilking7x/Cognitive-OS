@@ -49,6 +49,37 @@ observe → think (extended scratchpad) → plan (assumptions listed)
   `core/runtime_budget.py` — test-time compute scaled to task difficulty
   (Google), with cost tracked per task (Mistral).
 
+
+#### Governed loop - executable sketch
+
+The loop in §A as Python-style pseudocode, intended as a direct
+implementation template for `core/main_loop.py` + `core/cognition/`:
+
+```python
+def governed_tick(goal, session, budget):
+    obs = observe(session)                                  # tool-observation grounding
+    think = reason(goal, obs, session.working_notes)        # extended scratchpad
+    plan = propose_plan(think)                              # steps carry assumption tags
+    critique = challenge_assumptions(plan)                  # lightweight critic pass
+    while critique.blocking_issues:
+        plan = revise_plan(plan, critique)
+        critique = challenge_assumptions(plan)
+    for step in plan.steps:
+        budget.check()                                      # token/iteration budget
+        decision = govern(step)                             # ALLOW | GATE | DENY
+        if decision is DENY:
+            abort(step, decision.reason); continue
+        if decision is GATE:
+            await_human_approval(step)                      # high-stakes tier only
+        receipt = execute_tool(step)                        # schema-described call
+        verdict = verify(step, receipt)                     # expectation vs outcome
+        if not verdict.ok:
+            plan = replan_from(step, verdict); continue
+        session.episodic_log.append(evidence_entry(step, receipt, verdict))
+        session.working_notes.update(step.findings)         # tier-1 memory
+    return plan.outcome
+```
+
 ### B. Memory (`modules/memory/`, `modules/episodic/`, `core/retrieval_control.py`)
 
 Three tiers, chosen from the D1 disagreement:
@@ -160,6 +191,84 @@ Three layers (combining the D3 disagreement):
   on difficulty (Meta).
 - Full trace logging already exists (`trace_runtime.py`) — extend traces to
   carry evidence pointers so any run is replayable and auditable.
+
+## Architecture diagrams
+
+### System overview (Mermaid)
+
+```mermaid
+flowchart TD
+    subgraph LOOP["A - Governed cognitive loop"]
+        OBS[observe] --> THINK[think - extended scratchpad]
+        THINK --> PLAN[plan - assumption-tagged]
+        PLAN --> CRITIC{critic challenge}
+        CRITIC -->|blocking issue| PLAN
+        CRITIC -->|pass| GOV{governance gate}
+        GOV -->|DENY| ABORT[abort + log]
+        GOV -->|GATE| HUMAN[human approval]
+        GOV -->|ALLOW| ACT[act - tool call]
+        HUMAN --> ACT
+        ACT --> VRFY{verify vs goal}
+        VRFY -->|mismatch| PLAN
+        VRFY -->|match| LOG[episodic evidence log]
+    end
+    LOOP --> MEM["B - Memory: notes, retrieval, audit"]
+    LOOP --> BUS["C - Tool bus: MCP schemas, policy tiers"]
+    LOOP --> WSM["D - World and self models"]
+    WSM --> LOOP
+    LOOP --> LRN["E - Learning: offline evolution"]
+    GOV -.-> SF["F - Safety: trained + external + evidence"]
+    LOOP --> EVL["H - Evals: long-horizon, faithfulness, cost-adjusted"]
+    EVL --> LRN
+    LOOP --> MAG["G - Multi-agent: lead + subagents"]
+    LOOP --> RUN["I - Runtime: resumable, cost-aware routing"]
+```
+
+### Component map (ASCII)
+
+```
++--------------------------------------------------------------+
+|                 GOVERNED COGNITIVE LOOP (A)                  |
+|  observe -> think -> plan -> govern -> act -> verify         |
++--+----------------+----------------+----------------+--------+
+   |                |                |                |
++--v---+      +-----v------+   +-----v-------+   +----v-------+
+|MEMORY|      | TOOL BUS   |   | WORLD/SELF  |   |  SAFETY    |
+| (B)  |      |   (C)      |   | MODELS (D)  |   |   (F)      |
++--+---+      +-----+------+   +-----+-------+   +----+-------+
+   +----------------+----------------+----------------+
+                            |
+                    +-------v--------+
+                    | EPISODIC LOG   |  every step commits evidence
+                    +-------+--------+
+                            |
+                +-----------v------------+
+                | EVOLUTION (E, offline) |  mutate harness,
+                | + LOCAL ADAPTERS       |  eval-gated, gov veto
+                +------------------------+
+```
+
+### Memory tier decision flow (ASCII)
+
+```
+              +--------------------------------------+
+              | 1 - WORKING NOTES (primary)          |
+              | agent markdown in context,           |
+              | evidence-linked, human-inspectable   |
+              +------------------+-------------------+
+                   miss          |          hit -> answer
+              +------------------v-------------------+
+              | 2 - RETRIEVAL STORE (scale)          |
+              | vector/index over sessions + docs,   |
+              | learned ranking                      |
+              +------------------+-------------------+
+                   miss          |          hit -> answer
+              +------------------v-------------------+
+              | 3 - EPISODIC AUDIT LOG (always)      |
+              | append-only trace of every action,   |
+              | evidence pointers, replayable        |
+              +--------------------------------------+
+```
 
 ## Implementation roadmap (suggested order)
 
